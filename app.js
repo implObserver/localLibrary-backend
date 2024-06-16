@@ -13,7 +13,9 @@ import { connectLibraryDB } from './database/dispatcherdb.js';
 import compression from 'compression';
 import helmet from 'helmet'
 import RateLimit from 'express-rate-limit'
+import { addIPtoWhitelist } from './database/scripts/dynamicWhiteListIPs.js';
 
+addIPtoWhitelist();
 connectLibraryDB();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +29,7 @@ app.set('view engine', 'pug');
 
 const limiter = RateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 20,
+  max: 200,
 });
 
 app.use(limiter);
