@@ -1,12 +1,10 @@
 import { Router } from 'express';
-const router = Router();
+export const wikiRouter = Router();
 
-router.get("/", (req, res) => {
+wikiRouter.get("/", (req, res) => {
     res.send("wiki home page");
 });
 
-router.get("/about", (req, res) => {
+wikiRouter.get("/about", (req, res) => {
     res.send("About this wiki");
 });
-
-export default router;

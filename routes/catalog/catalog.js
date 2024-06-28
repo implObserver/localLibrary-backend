@@ -8,7 +8,7 @@ import { commonRouter } from './components/common.js';
 export const catalogRouter = Router();
 
 catalogRouter.use(
-    "/",
+    "/catalog",
     commonRouter,
     bookRouter,
     authorRouter,

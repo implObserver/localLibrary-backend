@@ -5,7 +5,6 @@ import express, { json, urlencoded, static as staticFile } from 'express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import wikiRouter from './routes/wiki.js';
 import { catalogRouter } from './routes/catalog/catalog.js';
@@ -13,9 +12,8 @@ import { connectLibraryDB } from './database/dispatcherdb.js';
 import compression from 'compression';
 import helmet from 'helmet'
 import RateLimit from 'express-rate-limit'
-import { addIPtoWhitelist } from './database/scripts/dynamicWhiteListIPs.js';
+import { indexRouter } from './routes/index.js';
 
-addIPtoWhitelist();
 connectLibraryDB();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -49,7 +47,7 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(staticFile(join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use(indexRouter);
 app.use('/users', usersRouter);
 app.use("/wiki", wikiRouter);
 app.use("/catalog", catalogRouter);

@@ -12,8 +12,15 @@ const author_list = asyncHandler(async (req, res, next) => {
     });
 });
 
-// Display detail page for a specific Author.
-const author_detail = asyncHandler(async (req, res, next) => {
+const author_list_api = asyncHandler(async (req, res, next) => {
+    const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
+    res.json("author_list", {
+        title: "Author List",
+        author_list: allAuthors,
+    });
+});
+
+const getAuthorDetails = async (req, res, next) => {
     // Get details of author and all their books (in parallel)
     const [author, allBooksByAuthor] = await Promise.all([
         Author.findById(req.params.id).exec(),
@@ -27,7 +34,26 @@ const author_detail = asyncHandler(async (req, res, next) => {
         return next(err);
     }
 
+    return [author, allBooksByAuthor];
+};
+
+// Display detail page for a specific Author.
+const author_detail_render = asyncHandler(async (req, res, next) => {
+    // Get details of author and all their books (in parallel)
+    const [author, allBooksByAuthor] = await getAuthorDetails(req, res, next);
+    console.log('wooow')
     res.render("author_detail", {
+        title: "Author Detail",
+        author: author,
+        author_books: allBooksByAuthor,
+    });
+});
+
+const author_detail_api = asyncHandler(async (req, res, next) => {
+    // Get details of author and all their books (in parallel)
+    const [author, allBooksByAuthor] = await getAuthorDetails(req, res, next);
+    console.log('wooow')
+    res.json({
         title: "Author Detail",
         author: author,
         author_books: allBooksByAuthor,
@@ -206,7 +232,8 @@ const author_update_post = [
 
 export const authorController = {
     author_list,
-    author_detail,
+    author_detail_render,
+    author_detail_api,
     author_create_get,
     author_create_post,
     author_delete_get,

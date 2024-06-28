@@ -6,6 +6,7 @@ import { BookInstance } from "../models/bookinstance.js";
 import asyncHandler from "express-async-handler";
 
 const index = asyncHandler(async (req, res, next) => {
+    console.log('wow')
     // Get details of books, book instances, authors and genre counts (in parallel)
     const [
         numBooks,
